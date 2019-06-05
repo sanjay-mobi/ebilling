@@ -22,6 +22,8 @@ public class CompanyTypeController {
     @RequestMapping(method = RequestMethod.POST, path = "/companyType")
     public ResponseEntity<CompanyType> save(@RequestBody CompanyType companyType){
 
+        //-- TODO -- pl remove company_type hardcoded
+        companyType.setType("party");
         companyType = companyTypeRepository.save(companyType);
 
         return new ResponseEntity<>(companyType, HttpStatus.OK);

@@ -6,6 +6,7 @@ import java.io.Serializable;
 import java.util.List;
 
 public class InvoiceProduct implements Serializable {
+    private int styleCodeId ;
     private String dateOfInvoice;
     private String buyerOrderNumber;
     private String buyerOrderDate;
@@ -13,6 +14,14 @@ public class InvoiceProduct implements Serializable {
     private List<SizeAndQuanity> sizesArray;
     private ProductMaster productMaster;
     private String totalQuantity;
+
+    public int getStyleCodeId() {
+        return styleCodeId;
+    }
+
+    public void setStyleCodeId(int styleCodeId) {
+        this.styleCodeId = styleCodeId;
+    }
 
     public String getTotalQuantity() {
         return totalQuantity;

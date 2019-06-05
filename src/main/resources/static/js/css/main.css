@@ -49,3 +49,36 @@ width: 70%;
 	width: 30%;
 	background-color: #CCC;
 }
+
+.nav-tabs{margin-bottom: 15px;}
+
+/*-------------------AngularJS & jQuery UI Datepicker starts-----------------------------
+.datepicker-container{position: relative;padding: 6px;float: left;border-radius: 2px;margin-bottom: 8px;}
+.datepicker-container.ng-invalid-datepicked{background-color: #F8C4C4;border: 1px solid #C28080;}
+.datepicker-container.ng-valid-datepicked{background-color: #DDFBCD;border: 1px solid #A6C297;}
+.datepicker-container .plugin{position: absolute;z-index: 1;}
+.datepicker-container .date-picked{color: #5D7A4E;}
+.datepicker-container .calendar-icon:before{content: 'Pick Date';}
+-------------------AngularJS & jQuery UI Datepicker ends-----------------------------*/
+
+input[type=text]{
+  border-radius: 0px !important;
+}
+.ui-datepicker-trigger{
+  position: absolute;
+  margin-top: -28px;
+  right:900pxpx;
+  border:none;
+  background-color:transparent;
+}
+
+.ng-valid{
+  border-left: 2px solid #090;
+}
+.ng-invalid{
+  border-left: 2px solid #900;
+}
+
+td, th {
+    padding: 5px;
+}

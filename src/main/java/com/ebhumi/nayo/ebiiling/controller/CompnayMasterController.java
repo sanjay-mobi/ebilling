@@ -3,12 +3,11 @@ package com.ebhumi.nayo.ebiiling.controller;
 import com.ebhumi.nayo.ebiiling.dao.Address;
 import com.ebhumi.nayo.ebiiling.dao.CompanyMaster;
 import com.ebhumi.nayo.ebiiling.dao.CompanyType;
-import com.ebhumi.nayo.ebiiling.dao.Student;
+
 
 import com.ebhumi.nayo.ebiiling.repository.AddressRepository;
 import com.ebhumi.nayo.ebiiling.repository.CompanyMasterRepository;
 import com.ebhumi.nayo.ebiiling.repository.CompanyTypeRepository;
-import org.apache.catalina.LifecycleState;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -87,7 +86,7 @@ public class CompnayMasterController {
 
     @RequestMapping(method = RequestMethod.GET, path = "/companyMaster")
     public ResponseEntity<Iterable<CompanyMaster>> findAll(){
-        Iterable<CompanyMaster> companyMasterList = companyMasterRepository.findAll();
+        Iterable<CompanyMaster> companyMasterList = companyMasterRepository.findByCompanyType();
 
         return new ResponseEntity<>(companyMasterList,HttpStatus.OK);
     }

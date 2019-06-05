@@ -9,11 +9,13 @@ import org.apache.tomcat.jni.Time;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.jnlp.IntegrationService;
+import javax.transaction.Transactional;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.DecimalFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -23,9 +25,10 @@ public class PdfUtility {
 
     @Autowired
     private CompanyMasterRepository companyMasterRepository;
-    private String dest ="/Users/sanjay.k/Documents/test.pdf";
+
     private DecimalFormat df = new DecimalFormat("#.00");
-    public void generatePdf(List<InvoiceProduct> productList, int suplierCompanyId, int partyCompanyId) throws IOException, DocumentException {
+    @Transactional
+    public String generatePdf(List<InvoiceProduct> productList, int suplierCompanyId, int partyCompanyId) throws IOException, DocumentException {
 
         CompanyMaster partyCompanyMaster = companyMasterRepository.findOne(partyCompanyId); // party company
         CompanyMaster bhumiCompanyMaster = companyMasterRepository.findOne(suplierCompanyId);
@@ -58,7 +61,7 @@ public class PdfUtility {
             }
         }
 
-        addressList =  bhumiCompanyMaster.getAddresses();
+        addressList =  partyCompanyMaster.getAddresses();
         addressIterator = addressList.iterator();
         while (addressIterator.hasNext()){
             Address address = addressIterator.next();
@@ -76,12 +79,16 @@ public class PdfUtility {
         Font font = new Font(Font.FontFamily.HELVETICA, 8);
 
         final Document document = new Document();
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+        LocalDate localDate = LocalDate.now();
+        String fileName =  invoiceNumber +".pdf" ;
+        fileName = fileName.replace("/" ,"_");
 
-        File file = new File("/Users/sanjay.k/Documents/test.pdf");
+        File file = new File(fileName);
 
-        file.getParentFile().mkdirs();
+       // file.getParentFile().mkdirs();
 
-        PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(dest));
+        PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(fileName));
 
         Rectangle one = new Rectangle(PageSize.A4.getWidth(), PageSize.A4.getHeight());
         document.setPageSize(one);
@@ -452,6 +459,11 @@ public class PdfUtility {
 
 
         }
+        PdfPCell pdfPCell1111 = new PdfPCell();
+        pdfPCell1111.setHorizontalAlignment(Rectangle.ALIGN_LEFT);
+        pdfPCell1111.setColspan(14);
+        pdfPCell1111.setPhrase(new Phrase("",font));
+        productTable.addCell(pdfPCell1111);
         // put the final or total sum values at the end of table .
         PdfPCell pdfPCell111 = new PdfPCell();
         pdfPCell111.setHorizontalAlignment(Rectangle.ALIGN_LEFT);
@@ -487,6 +499,8 @@ public class PdfUtility {
         }else {
             productTable.addCell(new Phrase(Double.toString(totalIGST),font));
         }
+
+        totalAmount= Double.parseDouble(df.format(totalAmount));
         productTable.addCell(new Phrase(Double.toString(totalAmount),font));
 
 
@@ -613,7 +627,8 @@ public class PdfUtility {
         pdfPTable1.setWidthPercentage(100);
         pdfPTable1.setWidths( new int [] {2,3});
         pdfPTable1.addCell(new Phrase("Total Value of Goods in Rs.(In Words):",bold2));
-        pdfPTable1.addCell(new Phrase(" here value in rs.",bold2));
+        String totalValueInWord = new NumberToWord().convertDecimlToWord(totalAmount);
+        pdfPTable1.addCell(new Phrase(totalValueInWord,bold2));
 
         PdfPCell pdfPCell25 = new PdfPCell();
         pdfPCell25.setColspan(2);
@@ -681,7 +696,7 @@ public class PdfUtility {
         document.add(pdfPTable);
         document.close();
 
-
+        return fileName;
 
     }
 }

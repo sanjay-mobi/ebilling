@@ -23,23 +23,29 @@ public class MyDeserializer extends StdDeserializer<ProductMaster> {
     public ProductMaster deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException, JsonProcessingException {
         JsonNode node = jp.getCodec().readTree(jp);
         double costPrice = node.get("costPrice").doubleValue();
-        double mrp = node.get("mrp").doubleValue();
+        double mrp;
+        if(node.get("MRP")!=null){
+            mrp = node.get("MRP").doubleValue();
+        }else{
+            mrp = node.get("mrp").doubleValue();
+        }
+
 
 
         ProductMaster test = new ProductMaster();
         test.setMRP(mrp);
         test.setCostPrice(costPrice);
         if(node.get("companyId") !=null) {
-            test.setId(node.get("companyId").asInt());
-        }
-        else {
-            test.setId(0);
-        }
-        if(node.get("id") !=null) {
-            test.setCompanyId(node.get("id").asInt());
+            test.setCompanyId(node.get("companyId").asInt());
         }
         else {
             test.setCompanyId(0);
+        }
+        if(node.get("id") !=null) {
+            test.setId(node.get("id").asInt());
+        }
+        else {
+            test.setId(0);
         }
 
         test.setBrand(node.get("brand").textValue());
